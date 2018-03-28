@@ -1,29 +1,13 @@
-# README #
+# MODULE 6 (Group) #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+## Start Here... ##
+* On ec2 instance, all Module 6 files can be found at ~/module_6
+*
+*
 
-### What is this repository for? ###
+## Creative Portion: ##
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+Description:
 
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+## Coded by ##
+Connor Rudmann (#437632)
