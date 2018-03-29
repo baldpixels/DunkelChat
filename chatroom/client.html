@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html>
    <head>
+      <!-- STYLESHEETS -->
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body>
+      <input type="username" id="login" placeholder="username" />
+      <input type="text" id="message_input" placeholder="message" />
+      <button onclick="sendMessage()">send</button>
+      <div id="chatlog"></div>
+
+      <!-- SCRIPTS -->
+      <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
       <script src="/socket.io/socket.io.js"></script>
+      <script src="/js/main.js"></script>
       <script type ="text/javascript">
         var socketio = io.connect();
         socketio.on("message_to_client", function(data) {
@@ -19,13 +31,5 @@
            });
         }
       </script>
-      <!-- STYLESHEETS -->
-      <link rel="stylesheet" type="text/css" href="style.css" />
-   </head>
-   <body>
-      <input type="username" id="login" placeholder="username" />
-      <input type="text" id="message_input" placeholder="message" />
-      <button onclick="sendMessage()">send</button>
-      <div id="chatlog"></div>
    </body>
 </html>
