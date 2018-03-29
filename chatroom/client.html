@@ -7,19 +7,24 @@
         socketio.on("message_to_client", function(data) {
            //Append an HR thematic break and the escaped HTML of the new message
            document.getElementById("chatlog").appendChild(document.createElement("hr"));
-           document.getElementById("chatlog").appendChild(document.createTextNode(data['message']));
+           document.getElementById("chatlog").appendChild(document.createTextNode(data['message'] + " / user: " + data['username']));
         });
 
         function sendMessage(){
            var msg = document.getElementById("message_input").value;
-           socketio.emit("message_to_server", {message:msg});
+           var un = document.getElementById("login").value;
+           socketio.emit("message_to_server", {
+             message: msg,
+             username: un
+           });
         }
       </script>
       <!-- STYLESHEETS -->
       <link rel="stylesheet" type="text/css" href="style.css" />
    </head>
    <body>
-      <input type="text" id="message_input"/>
+      <input type="username" id="login" placeholder="username" />
+      <input type="text" id="message_input" placeholder="message" />
       <button onclick="sendMessage()">send</button>
       <div id="chatlog"></div>
    </body>
