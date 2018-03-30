@@ -1,5 +1,5 @@
 /***** VARIABLES *****/
-var socket = io();
+var socket = io.connect();
 
 var username;
 var logged_in = false;
@@ -11,13 +11,19 @@ socket.on('message_to_client', function(data) {
 });
 
 socket.on('new_user', function(data) {
-  $('#chatlog').append('<hr />' + data['message']);
-  $('#chatlog').append('There are now ' + data['active_users'] + 'active users.');
+  $('#chatlog').append('<hr /><div class="server_message">' + data['message'] + ' There are now ' + data['active_users'] + ' active users.</div>');
 });
 
 socket.on('user_disconnect', function(data) {
-  $('#chatlog').append('<hr />' + data['message']);
-  $('#chatlog').append('There are now ' + data['active_users'] + 'active users.');
+  $('#chatlog').append('<hr /><div class="server_message">' + data['message'] + ' There are now ' + data['active_users'] + ' active users.</div>');
+});
+
+$(document).on('change', '#private_checkbox', function() {
+  if(this.checked) {
+    $('#password').show();
+  } else {
+    $('#password').hide();
+  }
 });
 
 /***** FUNCTIONS *****/

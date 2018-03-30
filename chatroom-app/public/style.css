@@ -15,7 +15,7 @@ body {
   background-repeat: no-repeat;
   background-position: 50% 24px;
   background-attachment: fixed;
-  font-family: Palatino, "Palatino Linotype", serif;
+
 }
 
 h1 {
@@ -27,6 +27,8 @@ h1 {
   margin: 0;
   padding: 0;
   font-size: 48px;
+  text-shadow: -1px 2px 1px #ccff00;
+  font-family: Palatino, "Palatino Linotype", serif;
 }
 
 #login {
@@ -48,6 +50,7 @@ h1 {
   width: 66%;
   padding: 6px;
   font-size: 36px;
+  font-family: Verdana, sans-serif;
   border-radius: 18px;
   background-color: #f4d4f7;
   color: black;
@@ -60,12 +63,15 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, +150%);
-  width: 50%;
+  width: 33%;
+  min-width: 48px;
   padding: 6px;
   font-size: 24px;
+  font-family: Verdana, sans-serif;
   border-radius: 15px;
   background-color: #6a19d9;
-  border-color: #d349c7;
+  border-color: #6a19d9;
+  color: #f4d4f7;
   border-width: 3px;
   border-style: outset;
 }
@@ -97,6 +103,7 @@ h1 {
   font-weight: bold;
   font-size: 36px;
   text-shadow: -2px 2px 1px;
+  font-family: Palatino, "Palatino Linotype", serif;
 }
 
 #chatlog {
@@ -110,12 +117,23 @@ h1 {
   font-size: 18px;
   color: #f4d4f7;
   margin-left: 12px;
+  font-family: Verdana, sans-serif;
+}
+
+.server_message {
+  font-size: 16px;
+  color: #ccff00;
+  margin-left: 12px;
+  font-style: italic;
+  font-family: Palatino, "Palatino Linotype", serif;
 }
 
 .author {
   color: #ccff00;
   font-size: 12px;
+  font-style: italic;
   margin-left: 6px;
+  font-family: Palatino, "Palatino Linotype", serif;
 }
 
 #messenger {
@@ -129,6 +147,7 @@ h1 {
   background-color: #d349c7;
   font-size: 18px;
   border-top: 3px solid black;
+  font-family: Verdana, sans-serif;
 }
 
 #messenger input {
@@ -149,7 +168,7 @@ h1 {
   color: #f4d4f7;
   font-size: 15px;
   border-radius: 9px;
-  border-color: #d349c7;
+  border-color: #6a19d9;
   border-width: 2px;
   margin: 6px 0 12px 18px;
   border-style: outset;
@@ -174,15 +193,24 @@ h3 {
   color: black;
   text-shadow: -1px 1px 1px;
   font-weight: lighter;
+  font-family: Palatino, "Palatino Linotype", serif;
 }
 
 #roomlist {
+  height: 270px;
+  padding: 0;
+  margin: 0;
+  overflow: wrap;
+}
+
+#roomlist ul {
   width: 100%;
   height: auto;
   list-style-type: none;
   color: #6a19d9;
   padding: 0;
   margin: 12px 0 24px 0;
+  font-family: Verdana, sans-serif;
 }
 
 #roomlist li {
@@ -197,6 +225,7 @@ h3 {
   width: 100%;
   padding: 0;
   margin: 0;
+  font-family: Verdana, sans-serif;
 }
 
 #new_room_name {
@@ -221,13 +250,27 @@ h3 {
   margin: 3px;
 }
 
+#password {
+  display: none;
+  font-size: 10px;
+  width: 66%;
+  background-color: #ccff00;
+  color: black;
+  padding: 3px;
+  margin: 12px 0 0 6px;
+  font-size: 12px;
+  border-radius: 9px;
+  border-color: #f4d4f7;
+  border-width: 3px;
+}
+
 #new_room button {
   width: 56px;
   background-color: #6a19d9;
   color: #f4d4f7;
   font-size: 12px;
   border-radius: 6px;
-  border-color: #f4d4f7;
+  border-color: #6a19d9;
   border-width: 2px;
   margin: 6px 0 12px 12px;
   border-style: outset;

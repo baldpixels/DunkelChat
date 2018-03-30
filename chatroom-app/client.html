@@ -16,8 +16,7 @@
     <div id="chatroom">
       <h2 id="chatroom_name">Lobby</h2>
       <div id="chatlog">
-        <hr /><div class="author">user1 said...</div>
-        <div class="message">random text to fill the space.</div>
+        <!-- messages get appended here -->
       </div>
     </div>
 
@@ -28,19 +27,20 @@
 
     <div id="active_rooms">
       <h3>Active Rooms:</h3>
-      <ul id="roomlist">
-        <a href="" onclick="moveTo();"><li  class="room">
-          room1
-        </li></a>
-        <a href="" onclick="moveTo();"><li class="room">
-          room2
-        </li></a>
-      </ul>
+      <div id="roomlist">
+        <ul>
+          <a href="" onclick="moveTo();"><li  class="room">
+            Lobby
+          </li></a>
+          <!-- make each li into a button or clickable object -->
+        </ul>
+      </div>
 
       <div id="new_room">
         <input type="text" id="new_room_name" placeholder="new room name" />
         <input type="checkbox" name="private_checkbox" id="private_checkbox" />
         <label for="private_checkbox">private?</label>
+        <input type="password" name="password" id="password" placeholder="password" />
         <button onclick="newRoom();">create</button>
       </div>
     </div>

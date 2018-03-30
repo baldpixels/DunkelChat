@@ -29,7 +29,7 @@
     socket.on('message_to_server', function(data) {
       console.log(data['message']);
 
-      socket.emit('message_to_client', {
+      io.sockets.emit('message_to_client', {
         username: data['username'],
         message: data['message']
       });
@@ -42,7 +42,7 @@
       logged_in = true;
       console.log('a user just signed in.');
 
-      socket.emit('new_user', {
+      io.sockets.emit('new_user', {
         username: socket.username,
         active_users: active_users,
         message: 'a new user is here.'
@@ -55,7 +55,7 @@
         active_users--;
         console.log('a user just disconnected...');
 
-        socket.emit('user_disconnect', {
+        io.sockets.emit('user_disconnect', {
     			username: socket.username,
           active_users: active_users,
     			message: 'a user disconnected...'
