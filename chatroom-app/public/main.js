@@ -2,9 +2,9 @@
 var socket = io.connect();
 
 var username;
-var curr_room = 'Lobby';
-var active_rooms = ['Lobby'];
 var logged_in = false;
+var curr_room = 'Lobby';
+var active_rooms = {};
 
 /***** EVENT LISTENERS *****/
 socket.on('message_to_client', function(data) {
@@ -62,12 +62,7 @@ $(document).on('click', '.room', moveTo);
 /***** FUNCTIONS *****/
 function sendMessage() {
   var msg = $('#message_input').val();
-
-  socket.emit('message_to_server', {
-    message: msg,
-    username: username,
-    curr_room: curr_room
-  });
+  socket.emit('message_to_server', msg);
 
   $('#message_input').val('');
 }
@@ -86,20 +81,35 @@ function login() {
 
 function moveTo() {
   curr_room = $(this).closest('li').text();
-  socket.emit('change_room', {
-    username: username,
-    new_room: curr_room
-  });
+  socket.emit('change_room', curr_room);
   resetChatlog();
 }
 
 function newRoom() {
   if($('#new_room_name').val() != '') {
     var new_room_name = $('#new_room_name').val();
-    socket.emit('create_new_room', new_room_name);
-    curr_room = new_room_name;
-    resetChatlog();
-    updateRoomList();
+
+    if($('#private_checkbox').prop('checked')) {
+      if($('#password').val() != '') {
+        var new_room_password = $('#password').val();
+        socket.emit('create_private_room', {
+          new_room_name: new_room_name,
+          new_room_password: new_room_password
+        });
+        curr_room = new_room_name;
+        resetChatlog();
+        updateRoomList();
+      }
+      else {
+        alert('please enter a password for your chatroom.')
+      }
+    }
+    else {
+      socket.emit('create_public_room', new_room_name);
+      curr_room = new_room_name;
+      resetChatlog();
+      updateRoomList();
+    }
   }
   else {
     alert('please enter a name for your chatroom.');
@@ -115,8 +125,10 @@ function updateRoomList() {
   // first clear the list
   $('#roomlist ul').html('');
 
-  for(var i=0; i<active_rooms.length; i++) {
-    $('#roomlist ul').append('<li class="room">' + active_rooms[i] + '</li>');
+  for(var room in active_rooms) {
+    if(active_rooms.hasOwnProperty(room)) {
+      $('#roomlist ul').append('<li class="room">' + room + '</li>');
+    }
   }
 }
 
