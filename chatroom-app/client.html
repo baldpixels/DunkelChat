@@ -10,7 +10,7 @@
 
     <div id="login">
       <input type="username" id="nickname" placeholder="nickname" />
-      <button onclick="login();">join</button>
+      <button id="login_button" onclick="login();">join</button>
     </div>
 
     <div id="chatroom">
@@ -22,16 +22,13 @@
 
     <div id="messenger">
       <input type="text" id="message_input" placeholder="message" value="" />
-      <button onclick="sendMessage();">send</button>
+      <button id="send_button" onclick="sendMessage();">send</button>
     </div>
 
     <div id="active_rooms">
       <h3>Active Rooms:</h3>
       <div id="roomlist">
         <ul>
-          <a href="" onclick="moveTo();"><li  class="room">
-            Lobby
-          </li></a>
           <!-- make each li into a button or clickable object -->
         </ul>
       </div>
@@ -41,7 +38,7 @@
         <input type="checkbox" name="private_checkbox" id="private_checkbox" />
         <label for="private_checkbox">private?</label>
         <input type="password" name="password" id="password" placeholder="password" />
-        <button onclick="newRoom();">create</button>
+        <button id="create_button" onclick="newRoom();">create</button>
       </div>
     </div>
 

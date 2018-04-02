@@ -7,7 +7,8 @@
   var io = require('socket.io')(server);
   var port = process.env.PORT || 3456;
 
-  var active_users = 0;
+  var active_users = 0; // turn this into an array?
+  var active_rooms = ['Lobby', 'We Like Sports'];
 
   server.listen(port, function() {
     console.log('Server is listening, shh...');
@@ -31,7 +32,8 @@
 
       io.sockets.emit('message_to_client', {
         username: data['username'],
-        message: data['message']
+        message: data['message'],
+        curr_room: data['curr_room']
       });
     });
 
@@ -42,10 +44,15 @@
       logged_in = true;
       console.log('a user just signed in.');
 
+      io.sockets.emit('update_rooms', {
+        active_rooms: active_rooms
+      });
+
       io.sockets.emit('new_user', {
         username: socket.username,
         active_users: active_users,
-        message: 'a new user is here.'
+        message: 'a new user is here.',
+        curr_room: socket.curr_room
       });
     });
 
@@ -58,9 +65,37 @@
         io.sockets.emit('user_disconnect', {
     			username: socket.username,
           active_users: active_users,
-    			message: 'a user disconnected...'
+    			message: 'a user disconnected...',
+          curr_room: socket.curr_room
     		});
       }
+    });
+
+  // a user changes chatrooms
+    socket.on('change_room', function (data) {
+      socket.username = data['username'];
+      socket.curr_room = data['new_room'];
+
+      active_users--; // in old room
+      active_users++; // in new room
+
+      io.sockets.emit('new_user', {
+        username: socket.username,
+        active_users: active_users,
+        message: 'a new user is here.',
+        curr_room: socket.curr_room
+      });
+    });
+
+  // a user starts a new chatroom
+    socket.on('create_new_room', function (new_room_name) {
+      console.log('a new room was just created.');
+
+      active_rooms.push(new_room_name);
+
+      io.sockets.emit('update_rooms', {
+        active_rooms: active_rooms
+      });
     });
 
   });
