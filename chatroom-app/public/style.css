@@ -83,11 +83,11 @@ h1 {
 
 #chatroom {
   position: absolute;
-  top: 200px;
+  top: 34%;
   left: 50%;
   transform: translate(-50%, 0);
   width: 66%;
-  height: 100%;
+  height: 66%;
   overflow: scroll;
   background-color: #6a19d9;
   border-radius: 9px 9px 0 0;
@@ -111,7 +111,8 @@ h1 {
   position: absolute;
   top: 39px;
   width: 100%;
-  height: 100%;
+  height: auto;
+  padding-bottom: 90px;
   overflow: scroll;
 }
 
@@ -180,6 +181,52 @@ h1 {
   border-style: inset;
 }
 
+h3 {
+  padding: 0;
+  margin: 12px 12px 12px 6px;
+  font-size: 24px;
+  color: black;
+  text-shadow: -1px 1px 1px;
+  font-weight: lighter;
+  font-family: Palatino, "Palatino Linotype", serif;
+}
+
+#active_users {
+  position: absolute;
+  text-align: left;
+  left: 0;
+  width: 16.6%;
+  height: 100%;
+  background-color: #f4d4f7;
+}
+
+#userlist {
+  height: 270px;
+  padding: 0;
+  margin: 0;
+  overflow: scroll;
+}
+
+#userlist ul {
+  width: 100%;
+  height: auto;
+  list-style-type: none;
+  color: #6a19d9;
+  padding: 0;
+  margin: 12px 0 24px 0;
+  font-family: Verdana, sans-serif;
+}
+
+#userlist li {
+  padding: 3px;
+  margin: 6px 0 6px 18px;
+  font-size: 15px;
+}
+
+#userlist li:hover {
+  text-decoration: underline;
+}
+
 #active_rooms {
   position: absolute;
   right: 0;
@@ -188,21 +235,11 @@ h1 {
   background-color: #f4d4f7;
 }
 
-h3 {
-  padding: 0;
-  margin: 12px 0 12px 6px;
-  font-size: 24px;
-  color: black;
-  text-shadow: -1px 1px 1px;
-  font-weight: lighter;
-  font-family: Palatino, "Palatino Linotype", serif;
-}
-
 #roomlist {
   height: 270px;
   padding: 0;
   margin: 0;
-  overflow: wrap;
+  overflow: scroll;
 }
 
 #roomlist ul {
@@ -215,13 +252,18 @@ h3 {
   font-family: Verdana, sans-serif;
 }
 
+.private_icon {
+  width: 20px;
+  float: left;
+}
+
 #roomlist li {
   padding: 3px;
-  margin: 6px 0 6px 12px;
+  margin: 6px 0 6px 18px;
   font-size: 15px;
 }
 
-#roomList li:hover {
+#roomlist li:hover {
   background-color: black;
   color: #f4d4f7;
 }

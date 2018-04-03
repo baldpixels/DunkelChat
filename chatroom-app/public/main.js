@@ -17,18 +17,21 @@ socket.on('message_to_client', function(data) {
 socket.on('new_user', function(data) {
   if(data['curr_room'] === curr_room) {
     $('#chatlog').append('<hr /><div class="server_message">' + data['message'] + ' There are now ' + data['active_users'] + ' active users.</div>');
+    updateUserList();
   }
 });
 
 socket.on('user_disconnect', function(data) {
   if(data['curr_room'] === curr_room) {
     $('#chatlog').append('<hr /><div class="server_message">' + data['message'] + ' There are now ' + data['active_users'] + ' active users.</div>');
+    updateUserList();
   }
 });
 
 socket.on('update_rooms', function(data) {
   active_rooms = data['active_rooms'];
   updateRoomList();
+  updateUserList();
 });
 
 $(document).on('change', '#private_checkbox', function() {
@@ -57,6 +60,12 @@ $(document).on('keypress', '#new_room_name', function(e) {
   }
 });
 
+$(document).on('keypress', '#password', function(e) {
+  if(e.which == 13) {
+    $('#create_button').click();
+  }
+});
+
 $(document).on('click', '.room', moveTo);
 
 /***** FUNCTIONS *****/
@@ -80,9 +89,30 @@ function login() {
 }
 
 function moveTo() {
-  curr_room = $(this).closest('li').text();
-  socket.emit('change_room', curr_room);
-  resetChatlog();
+  var targetRoomName = $(this).closest('li').text();
+
+  if(curr_room === targetRoomName) {
+    // do nothing
+  }
+  else {
+    if(active_rooms[targetRoomName].private) {
+      // this is a private room
+      var enteredPassword = prompt("Please enter this room's password.");
+      if(enteredPassword === active_rooms[targetRoomName].password) {
+        curr_room = targetRoomName;
+        socket.emit('change_room', curr_room);
+        resetChatlog();
+      }
+      else {
+        alert("That was the wrong password.");
+      }
+    }
+    else {
+      curr_room = targetRoomName;
+      socket.emit('change_room', curr_room);
+      resetChatlog();
+    }
+  }
 }
 
 function newRoom() {
@@ -96,6 +126,9 @@ function newRoom() {
           new_room_name: new_room_name,
           new_room_password: new_room_password
         });
+        $('#new_room_name').val('');
+        $('#password').hide();
+        $('#private_checkbox').prop('checked', false);
         curr_room = new_room_name;
         resetChatlog();
         updateRoomList();
@@ -105,6 +138,7 @@ function newRoom() {
       }
     }
     else {
+      $('#new_room_name').val('');
       socket.emit('create_public_room', new_room_name);
       curr_room = new_room_name;
       resetChatlog();
@@ -127,8 +161,21 @@ function updateRoomList() {
 
   for(var room in active_rooms) {
     if(active_rooms.hasOwnProperty(room)) {
+      if(active_rooms[room].private) {
+        $('#roomlist ul').append('<img class="private_icon" src="lock_icon.png" alt="private" />')
+      }
       $('#roomlist ul').append('<li class="room">' + room + '</li>');
     }
+  }
+}
+
+function updateUserList() {
+  // first clear the list
+  $('#userlist ul').html('');
+
+  for(var i=0; i<active_rooms[curr_room].usernames.length; i++) {
+    var user = active_rooms[curr_room].usernames[i];
+    $('#userlist ul').append('<li class="user">' + user + '</li>');
   }
 }
 

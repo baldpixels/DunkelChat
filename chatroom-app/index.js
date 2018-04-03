@@ -8,8 +8,16 @@
   var port = process.env.PORT || 3456;
 
   var active_rooms = {
-    'Lobby': 0,
-    'We Like Sports': 0
+    'Lobby': {
+      'private': false,
+      'active_users': 0,
+      'usernames': []
+    },
+    'We Like Sports': {
+      'private': false,
+      'active_users': 0,
+      'usernames': []
+    },
   };
 
   server.listen(port, function() {
@@ -66,7 +74,8 @@
     socket.username = username;
     socket.curr_room = 'Lobby';
 
-    active_rooms['Lobby']++;
+    active_rooms['Lobby'].active_users++;
+    active_rooms['Lobby'].usernames.push(socket.username);
     console.log('a user just signed in.');
 
     io.sockets.emit('update_rooms', {
@@ -76,7 +85,7 @@
     io.sockets.emit('new_user', {
       message: 'a new user is here.',
       username: socket.username,
-      active_users: active_rooms[socket.curr_room],
+      active_users: active_rooms[socket.curr_room].active_users,
       curr_room: socket.curr_room
     });
   }
@@ -85,19 +94,20 @@
     if(socket.logged_in) {
       console.log('a user just disconnected...');
 
-      active_rooms[socket.curr_room]--;
+      active_rooms[socket.curr_room].active_users--;
+      removeUser(active_rooms[socket.curr_room].usernames, socket.username);
 
       io.sockets.emit('user_disconnect', {
         message: 'a user disconnected...',
         username: socket.username,
-        active_users: active_rooms[socket.curr_room],
+        active_users: active_rooms[socket.curr_room].active_users,
         curr_room: socket.curr_room
       });
     }
   }
 
   function deliverUserMessage(msg, socket) {
-    console.log(msg);
+    console.log(socket.username + ': ' + msg);
 
     io.sockets.emit('message_to_client', {
       message: msg,
@@ -107,23 +117,24 @@
   }
 
   function changeUsersRoom(room, socket) {
-    active_rooms[socket.curr_room]--; // old room
+    active_rooms[socket.curr_room].active_users--; // old room
+    removeUser(active_rooms[socket.curr_room].usernames, socket.username);
 
     io.sockets.emit('user_disconnect', {
       message: 'a user just left the room...',
       username: socket.username,
-      active_users: active_rooms[socket.curr_room],
+      active_users: active_rooms[socket.curr_room].active_users,
       curr_room: socket.curr_room
     });
 
     socket.curr_room = room;
-
-    active_rooms[socket.curr_room]++; // in new room
+    active_rooms[socket.curr_room].active_users++; // new room
+    active_rooms[socket.curr_room].usernames.push(socket.username);
 
     io.sockets.emit('new_user', {
       message: 'a user just joined the room.',
       username: socket.username,
-      active_users: active_rooms[socket.curr_room],
+      active_users: active_rooms[socket.curr_room].active_users,
       curr_room: socket.curr_room
     });
   }
@@ -131,7 +142,10 @@
   function userCreatesPublicRoom(roomName, socket) {
     console.log('a new public room was just created.');
 
-    active_rooms[roomName] = 0;
+    active_rooms[roomName] = {
+      'private': false,
+      'active_users': 0
+    };
 
     changeUsersRoom(roomName, socket)
 
@@ -143,11 +157,24 @@
   function userCreatesPrivateRoom(roomName, roomPassword, socket) {
     console.log('a new private room was just created.');
 
-    active_rooms[roomName] = 0;
+    active_rooms[roomName] = {
+      'private': true,
+      'active_users': 0,
+      'usernames': [],
+      'password': roomPassword
+    };
 
     changeUsersRoom(roomName, socket)
 
     io.sockets.emit('update_rooms', {
       active_rooms: active_rooms
     });
+  }
+
+  function removeUser(array, element) {
+    const index = array.indexOf(element);
+
+    if (index !== -1) {
+        array.splice(index, 1);
+    }
   }
