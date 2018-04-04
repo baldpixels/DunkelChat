@@ -51,6 +51,11 @@
       deliverUserMessage(msg, socket);
     });
 
+  // a user sends a private message
+    socket.on('private_message', function (data) {
+      deliverPrivMessage(data['message'], data['target_username'], socket);
+    });
+
   // a user changes chatrooms
     socket.on('change_room', function (curr_room) {
       changeUsersRoom(curr_room, socket);
@@ -64,6 +69,13 @@
   // a user starts a new *private* chatroom
     socket.on('create_private_room', function (data) {
       userCreatesPrivateRoom(data['new_room_name'], data['new_room_password'], socket);
+    });
+
+  // a user kicks another user
+    socket.on('kick_user', function (targetUser) {
+      console.log('a user was just kicked.');
+
+      io.sockets.emit('kicked_user', targetUser);
     });
 
   });
@@ -116,6 +128,16 @@
     });
   }
 
+  function deliverPrivMessage(msg, targetUsername, socket) {
+    console.log(socket.username + ' sent a private message to ' + targetUsername);
+
+    io.sockets.emit('deliver_private_message', {
+      message: msg,
+      sender: socket.username,
+      target_username: targetUsername,
+    });
+  }
+
   function changeUsersRoom(room, socket) {
     active_rooms[socket.curr_room].active_users--; // old room
     removeUser(active_rooms[socket.curr_room].usernames, socket.username);
@@ -127,6 +149,7 @@
       curr_room: socket.curr_room
     });
 
+  /** ! **/
     socket.curr_room = room;
     active_rooms[socket.curr_room].active_users++; // new room
     active_rooms[socket.curr_room].usernames.push(socket.username);
@@ -137,6 +160,10 @@
       active_users: active_rooms[socket.curr_room].active_users,
       curr_room: socket.curr_room
     });
+
+    io.sockets.emit('update_rooms', {
+      active_rooms: active_rooms
+    });
   }
 
   function userCreatesPublicRoom(roomName, socket) {
@@ -144,10 +171,11 @@
 
     active_rooms[roomName] = {
       'private': false,
-      'active_users': 0
+      'active_users': 0,
+      'usernames': []
     };
 
-    changeUsersRoom(roomName, socket)
+    changeUsersRoom(roomName, socket);
 
     io.sockets.emit('update_rooms', {
       active_rooms: active_rooms
@@ -164,7 +192,7 @@
       'password': roomPassword
     };
 
-    changeUsersRoom(roomName, socket)
+    changeUsersRoom(roomName, socket);
 
     io.sockets.emit('update_rooms', {
       active_rooms: active_rooms
