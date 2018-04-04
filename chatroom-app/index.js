@@ -78,6 +78,14 @@
       io.sockets.emit('kicked_user', targetUser);
     });
 
+  // admin alerts room
+    socket.on('alert_room', function (data) {
+      io.sockets.emit('room_alerted', {
+        message: data['msg'],
+        curr_room: data['curr_room']
+      });
+    });
+
   });
 
 /***** FUNCTIONS *****/

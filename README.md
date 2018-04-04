@@ -8,7 +8,8 @@
 * On ec2 instance, all Module 6 files can be found at ~/module_6
 
 ## Creative Portion: ##
-* DunkelChat's style was creative, I'd argue.
+* A room's creator has the option to send a message to every user in the room via an alert pop-up.
+* DunkelChat's layout and style was creative, I'd argue.
 
 ## Sources ##
 * I referenced [this socket.io example](https://github.com/socketio/socket.io/tree/master/examples/chat), but I believe I made the actual interface and socket interactions uniquely my own.

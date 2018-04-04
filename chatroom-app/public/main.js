@@ -42,10 +42,16 @@ socket.on('update_rooms', function(data) {
 });
 
 socket.on('kicked_user', function(targetUser) {
-  alert(targetUser);
   if(username === targetUser) {
+    alert('Sorry, you were just kicked out of ' + curr_room + '...');
     curr_room = 'Lobby';
     socket.emit('change_room', curr_room);
+  }
+});
+
+socket.on('room_alerted', function(data) {
+  if(data['curr_room'] === curr_room) {
+    alert('A message from room admin: ' + data['message']);
   }
 });
 
@@ -200,6 +206,13 @@ function newRoom() {
 function resetChatlog() {
   $('#chatlog').html('');
   $('#chatroom_name').html(curr_room);
+
+  if(owned_rooms.includes(curr_room)) {
+    $('#alert_button').show();
+  }
+  else {
+    $('#alert_button').hide();
+  }
 }
 
 function updateRoomList() {
@@ -278,6 +291,16 @@ function kickUser(targetUser) {
   else {
     alert('You cannot kick yourself from your own room. Now that is just ridiculous.');
   }
+}
+
+function alertRoom() {
+  var msg = $('#message_input').val();
+  socket.emit('alert_room', {
+    msg: msg,
+    curr_room: curr_room
+  });
+
+  $('#message_input').val('');
 }
 
 /***** MAIN RUN *****/
